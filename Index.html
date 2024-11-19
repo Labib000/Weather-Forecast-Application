@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Forecast App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body
+    class="bg-gradient-to-b from-blue-700 via-blue-500 to-blue-300 text-gray-800"
+  >
+    <!-- Header -->
+    <header class="bg-blue-900 text-white p-6 shadow-md">
+      <h1 class="text-3xl font-bold text-center">Weather Forecast</h1>
+      <p class="text-center text-gray-300 mt-2">
+        Get accurate weather updates for any city
+      </p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-6">
+      <!-- Search Section -->
+      <section class="mb-8 flex flex-col sm:flex-row items-center gap-4">
+        <input
+          id="city-input"
+          type="text"
+          placeholder="Enter a city..."
+          class="flex-grow p-3 border rounded shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <button
+          id="search-btn"
+          class="p-3 bg-blue-600 text-white rounded hover:bg-blue-700 shadow-lg"
+        >
+          Search
+        </button>
+        <button
+          id="current-loc-btn"
+          class="p-3 bg-green-600 text-white rounded hover:bg-green-700 shadow-lg"
+        >
+          Use Current Location
+        </button>
+      </section>
+
+      <!-- Recent Cities Dropdown -->
+      <section class="mb-8">
+        <label
+          for="recent-cities"
+          class="block text-lg font-semibold text-gray-700 mb-2"
+        >
+          Recently Searched Cities:
+        </label>
+        <select
+          id="recent-cities"
+          class="w-full p-3 border rounded shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="" disabled selected>Select a recent city</option>
+        </select>
+      </section>
+
+      <!-- Weather Info Section -->
+      <section id="weather-info" class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-semibold mb-4 text-center">Current Weather</h2>
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <img id="weather-icon" src="" alt="" class="w-20 h-20 hidden" />
+            <div id="current-weather" class="ml-4">
+              <p class="text-xl font-bold text-gray-700" id="temp">--°C</p>
+              <p class="text-gray-600" id="description">Weather description</p>
+            </div>
+          </div>
+          <div id="additional-info" class="text-right">
+            <p class="text-gray-600">
+              Humidity: <span id="humidity">--%</span>
+            </p>
+            <p class="text-gray-600">
+              Wind Speed: <span id="wind-speed">-- m/s</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5-Day Forecast Section -->
+      <section id="forecast" class="bg-blue-50 p-6 rounded-lg shadow-lg mt-8">
+        <h2 class="text-2xl font-semibold mb-4 text-center text-blue-800">
+          5-Day Forecast
+        </h2>
+        <div
+          id="forecast-container"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"
+        >
+          <!-- Forecast cards will be dynamically generated here -->
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-blue-900 text-white text-center p-4 mt-8 shadow-inner">
+      <p>© 2024 Weather App - Built with Tailwind CSS</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="app.js"></script>
+  </body>
+</html>
