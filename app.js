@@ -1,4 +1,5 @@
-const API_KEY = "be537993ed5ff0076d22fcd964a642ba"; 
+// Your OpenWeatherMap API key
+const API_KEY = "";
 
 // DOM elements
 const cityInput = document.getElementById("city-input");
@@ -7,36 +8,60 @@ const currentLocBtn = document.getElementById("current-loc-btn");
 const recentCitiesDropdown = document.getElementById("recent-cities");
 const weatherInfo = document.getElementById("weather-info");
 const forecastContainer = document.getElementById("forecast-container");
+const errorMessage = document.createElement("p");
+errorMessage.className = "text-red-500 text-sm mt-2";
+
+// Add error message to the UI
+function displayError(message) {
+  errorMessage.textContent = message;
+  if (!weatherInfo.contains(errorMessage)) {
+    weatherInfo.appendChild(errorMessage);
+  }
+}
+
+// Remove error message from the UI
+function clearError() {
+  if (weatherInfo.contains(errorMessage)) {
+    weatherInfo.removeChild(errorMessage);
+  }
+}
 
 // Fetch current weather by city name
 async function fetchWeatherByCity(city) {
+  clearError(); // Clear previous errors
+  if (!city) {
+    displayError("Please enter a city name!");
+    return;
+  }
+
   try {
     const response = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
     );
-    if (!response.ok) throw new Error("City not found");
+    if (!response.ok) throw new Error("City not found. Please check the city name.");
     const data = await response.json();
     updateCurrentWeather(data);
     saveRecentCity(city);
     fetchForecast(city);
   } catch (error) {
-    alert(error.message);
+    displayError(error.message);
   }
 }
 
 // Fetch current weather by coordinates
 async function fetchWeatherByCoords(lat, lon) {
+  clearError(); // Clear previous errors
   try {
     const response = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
     );
-    if (!response.ok) throw new Error("Unable to fetch location data");
+    if (!response.ok) throw new Error("Unable to fetch weather data for your location.");
     const data = await response.json();
     updateCurrentWeather(data);
     saveRecentCity(data.name);
     fetchForecast(data.name);
   } catch (error) {
-    alert(error.message);
+    displayError(error.message);
   }
 }
 
@@ -46,11 +71,11 @@ async function fetchForecast(city) {
     const response = await fetch(
       `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric`
     );
-    if (!response.ok) throw new Error("Forecast not found");
+    if (!response.ok) throw new Error("Unable to fetch the weather forecast.");
     const data = await response.json();
     updateForecast(data.list);
   } catch (error) {
-    alert(error.message);
+    displayError(error.message);
   }
 }
 
@@ -124,8 +149,7 @@ function updateRecentCitiesDropdown(cities) {
 // Event: City search
 searchBtn.addEventListener("click", () => {
   const city = cityInput.value.trim();
-  if (city) fetchWeatherByCity(city);
-  else alert("Please enter a city name!");
+  fetchWeatherByCity(city);
 });
 
 // Event: Current location search
@@ -137,11 +161,11 @@ currentLocBtn.addEventListener("click", () => {
         fetchWeatherByCoords(latitude, longitude);
       },
       () => {
-        alert("Unable to access your location!");
+        displayError("Unable to access your location!");
       }
     );
   } else {
-    alert("Geolocation is not supported by your browser.");
+    displayError("Geolocation is not supported by your browser.");
   }
 });
 
